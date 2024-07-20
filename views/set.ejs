@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/css/main.css" rel="stylesheet">
+    <title>Set Details</title>
+</head>
+<style>
+    .hero {
+        background-color: #fff;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    .content {
+        background-color: #fff;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-top: 2rem;
+    }
+    .content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 0.5rem;
+    }
+    .btn {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        color: #fff;
+        background-color: #1f2937;
+        border-radius: 0.25rem;
+        text-decoration: none;
+        text-align: center;
+        margin-top: 1rem;
+    }
+    #quote {
+        background-color: #f3f4f6;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-top: 1rem;
+    }
+</style>
+<body class="bg-gray-100">
+    <%- include('partials/navbar', { page: '' }) %>
+    <div class="container mx-auto mt-10">
+        <div class="hero bg-white p-10 rounded-lg shadow-md text-center">
+            <h1 class="text-3xl mb-4"><%= set.name %></h1>
+            <p>Below, you will find detailed information about the set: <%= set.name %></p>
+        </div>
+        <div class="mt-10">
+            <img src="<%= set.img_url %>" alt="<%= set.name %>" class="w-full h-auto">
+            <h2 class="text-2xl mt-4">Name: <%= set.name %></h2>
+            <p>Year: <%= set.year %></p>
+            <p>Theme: <%= set.theme %></p>
+            <p>Number of Parts: <%= set.num_parts %></p>
+            <div id="quote" class="mt-4"></div>
+            <a href="#" onclick="history.back(); return false;" class="btn btn-secondary mt-4">Back</a>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            fetch("https://quotable.io/random")
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("quote").innerHTML = `<p>"${data.content}" - ${data.author}</p>`;
+                });
+        });
+    </script>
+</body>
+</html>

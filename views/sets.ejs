@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/css/main.css" rel="stylesheet">
+    <title>Collection</title>
+</head>
+<style>
+    .hero {
+        background-color: #fff;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    .table-container {
+        background-color: #fff;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-top: 2rem;
+    }
+    .table-auto {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .table-auto th, .table-auto td {
+        border: 1px solid #e2e8f0;
+        padding: 0.5rem;
+        text-align: left;
+    }
+    .btn {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        color: #fff;
+        background-color: #1f2937;
+        border-radius: 0.25rem;
+        text-decoration: none;
+        text-align: center;
+    }
+</style>
+<body class="bg-gray-100">
+    <%- include('partials/navbar', { page: '/lego/sets' }) %>
+    <div class="container mx-auto mt-10">
+        <div class="hero bg-white p-10 rounded-lg shadow-md text-center">
+            <h1 class="text-3xl mb-4">Lego Collection</h1>
+        </div>
+        <div class="mt-10">
+            <table class="table-auto w-full">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Theme</th>
+                        <th>Year</th>
+                        <th>Parts</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% sets.forEach(set => { %>
+                        <tr>
+                            <td><img src="<%= set.img_url %>" alt="<%= set.name %>" class="w-16 h-16"></td>
+                            <td><%= set.name %></td>
+                            <td><a href="/lego/sets?theme=<%= set.theme %>" class="btn btn-primary"><%= set.theme %></a></td>
+                            <td><%= set.year %></td>
+                            <td><%= set.num_parts %></td>
+                            <td><a href="/lego/sets/<%= set.set_num %>" class="btn btn-secondary">Details</a></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
