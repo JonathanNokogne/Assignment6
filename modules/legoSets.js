@@ -1,57 +1,97 @@
-// Import the JSON data
-const setData = require("../data/setData.json");
-const themeData = require("../data/themeData.json");
+const Sequelize = require('sequelize');
+require('dotenv').config();
 
-// Initialize an empty array
-let sets = [];
+const sequelize = new Sequelize(process.env.DB_DATABASE, process.env.DB_USER, process.env.DB_PASSWORD, {
+  host: process.env.DB_HOST,
+  dialect: 'postgres',
+  logging: false,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }
+  }
+});
 
-// Function to initialize the data
+const Theme = sequelize.define('Theme', {
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  name: Sequelize.STRING
+}, {
+  timestamps: false
+});
+
+const Set = sequelize.define('Set', {
+  set_num: {
+    type: Sequelize.STRING,
+    primaryKey: true
+  },
+  name: Sequelize.STRING,
+  year: Sequelize.INTEGER,
+  num_parts: Sequelize.INTEGER,
+  theme_id: Sequelize.INTEGER,
+  img_url: Sequelize.STRING
+}, {
+  timestamps: false
+});
+
+Set.belongsTo(Theme, { foreignKey: 'theme_id' });
+
 function initialize() {
-    return new Promise((resolve, reject) => {
-        try {
-            setData.forEach(set => {
-                const theme = themeData.find(theme => theme.id === set.theme_id).name;
-                sets.push({ ...set, theme });
-            });
-            resolve();
-        } catch (error) {
-            reject(error);
-        }
-    });
+  return sequelize.sync();
 }
 
-// Function to get all sets
 function getAllSets() {
-    return new Promise((resolve) => {
-        resolve(sets);
-    });
+  return Set.findAll({ include: [Theme] });
 }
 
-// Function to get a set by its number
 function getSetByNum(setNum) {
-    return new Promise((resolve, reject) => {
-        const set = sets.find(set => set.set_num === setNum);
-        if (set) {
-            resolve(set);
-        } else {
-            reject("Set not found");
-        }
-    });
+  return Set.findAll({
+    include: [Theme],
+    where: { set_num: setNum }
+  }).then(sets => {
+    if (sets.length > 0) return sets[0];
+    else throw new Error('Unable to find requested set');
+  });
 }
 
-// Function to get sets by theme
 function getSetsByTheme(theme) {
-    return new Promise((resolve, reject) => {
-        const filteredSets = sets.filter(set => set.theme.toLowerCase().includes(theme.toLowerCase()));
-        if (filteredSets.length > 0) {
-            resolve(filteredSets);
-        } else {
-            reject("No sets found for the given theme");
-        }
-    });
+  return Set.findAll({
+    include: [Theme],
+    where: {
+      '$Theme.name$': {
+        [Sequelize.Op.iLike]: `%${theme}%`
+      }
+    }
+  }).then(sets => {
+    if (sets.length > 0) return sets;
+    else throw new Error('Unable to find requested sets');
+  });
 }
 
-// Export the functions as a module
-module.exports = { initialize, getAllSets, getSetByNum, getSetsByTheme };
+function addSet(setData) {
+  return Set.create(setData).catch(err => {
+    throw new Error(err.errors[0].message);
+  });
+}
 
+function getAllThemes() {
+  return Theme.findAll();
+}
 
+function editSet(set_num, setData) {
+  return Set.update(setData, { where: { set_num } }).catch(err => {
+    throw new Error(err.errors[0].message);
+  });
+}
+
+function deleteSet(set_num) {
+  return Set.destroy({ where: { set_num } }).catch(err => {
+    throw new Error(err.errors[0].message);
+  });
+}
+
+module.exports = { initialize, getAllSets, getSetByNum, getSetsByTheme, addSet, getAllThemes, editSet, deleteSet };
