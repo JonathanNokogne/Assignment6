@@ -6,9 +6,9 @@
 * 
 *  https://www.senecacollege.ca/about/policies/academic-integrity-policy.html
 * 
-*  Name: Jonathan Joy Nokogne Tene Student ID: 106100225 Date: ______________
+*  Name: Jonathan Joy Nokogne Tene Student ID: 106100225 Date: 02/08/2024
 *
-*  Published URL: ___________________________________________________________
+*  Published URL: https://github.com/JonathanNokogne/Assignment-5.git
 *
 ********************************************************************************/
 
