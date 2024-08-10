@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/css/main.css" rel="stylesheet">
+    <title>User History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .heading-container {
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+        }
+        .heading-container h1 {
+            font-size: 36px;
+            font-weight: bold;
+            color: #333333;
+            margin-bottom: 10px;
+        }
+        .heading-container p {
+            color: #666666;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        .table-container {
+            max-width: 100%;
+            padding: 20px;
+            margin: 0 auto;
+            box-sizing: border-box;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <%- include('partials/navbar', { page: '/userHistory' }) %>
+
+    <div class="heading-container">
+        <h1><%= session.user.userName %></h1>
+        <p>User History: <%= session.user.email %></p>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Login Date/Time</th>
+                    <th>Client Information</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% session.user.loginHistory.forEach((login) => { %>
+                <tr>
+                    <td><%= login.dateTime %></td>
+                    <td><%= login.userAgent %></td>
+                </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

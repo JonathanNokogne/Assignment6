@@ -4,9 +4,13 @@
         <div class="flex space-x-4">
             <a class="<%= (page == '/lego/sets') ? 'text-white' : 'text-gray-300' %> hover:text-white" href="/lego/sets">View Collection</a>
             <a class="<%= (page == '/about') ? 'text-white' : 'text-gray-300' %> hover:text-white" href="/about">About</a>
+            <% if (!session.user) { %>
+                <a href="/login" class="text-gray-300 hover:text-white">Login</a>
+                <a href="/register" class="text-gray-300 hover:text-white">Register</a>
+            <% } else { %>
+                <a href="/userHistory" class="text-gray-300 hover:text-white">History</a>
+                <a href="/logout" class="text-gray-300 hover:text-white">Logout</a>
+            <% } %>
         </div>
     </div>
 </nav>
-
-<li><a class="<%= (page == '/lego/addSet') ? 'active' : '' %>" href="/lego/addSet">Add to Collection</a></li>
-s
